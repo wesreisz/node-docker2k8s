@@ -1,0 +1,11 @@
+# Save to 'ingress.yaml'
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: hello-kubernetes
+  labels:
+    app: hello-kubernetes
+spec:
+  backend:
+    serviceName: hello-kubernetes
+    servicePort: 80
