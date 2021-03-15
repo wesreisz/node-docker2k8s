@@ -1,0 +1,36 @@
+---
+resources:
+  - name: tutorial
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/wesreisz/node-docker2k8s.git
+      branch: concourse
+
+  - name: hello-node
+    type: docker-image
+    source:
+      email: ((docker-hub-email))
+      username: ((docker-hub-username))
+      password: ((docker-hub-password))
+      repository: ((docker-hub-username))/hello-node
+      tag: v6
+
+jobs:
+  - name: publish
+    public: true
+    plan:
+      - get: tutorial
+      - put: hello-node
+        params:
+          build: docker
+      - task: run
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: ((docker-hub-username))/hello-node
+          run:
+            path: node
+            args: [index.js]
